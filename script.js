@@ -15,6 +15,16 @@ async function loadProducts() {
 
     snapshot.forEach((product) => {
 
+    // ...
+
+});
+
+activateCart();
+activateFavorites();
+activateCategoryFilter();
+renderCart();
+
+}
         const data = product.data();
 
         productsContainer.innerHTML += `
@@ -37,7 +47,7 @@ async function loadProducts() {
 
     });
 
-}
+ }
 
 loadProducts();
 // Search
@@ -63,12 +73,55 @@ searchInput.addEventListener("keyup", () => {
 });
 // Shopping Cart
 
-let count = 0;
-let total = 0;
+// ======================
+// Shopping Cart
+// ======================
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const cartCount = document.getElementById("cart-count");
 const cartItems = document.getElementById("cart-items");
 const totalPrice = document.getElementById("total-price");
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function renderCart() {
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+
+        total += item.price;
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            ${item.name} - $${item.price}
+            <button class="delete-item">Delete</button>
+        `;
+
+        li.querySelector(".delete-item").onclick = () => {
+
+            cart.splice(index, 1);
+
+            saveCart();
+
+            renderCart();
+
+        };
+
+        cartItems.appendChild(li);
+
+    });
+
+    cartCount.textContent = cart.length;
+    totalPrice.textContent = total;
+
+}
 
 function activateCart() {
 
@@ -84,38 +137,14 @@ function activateCart() {
                 product.querySelector("p").textContent.replace("$","")
             );
 
-            count++;
-            total += price;
+      cart.push({
+    name,
+    price
+});
 
-            cartCount.textContent = count;
-            totalPrice.textContent = total;
-
-            const li = document.createElement("li");
-
-            li.innerHTML = `
-                ${name} - $${price}
-                <button>❌</button>
-            `;
-
-            li.querySelector("button").onclick = () => {
-
-                li.remove();
-
-                count--;
-                total -= price;
-
-                cartCount.textContent = count;
-                totalPrice.textContent = total;
-
-            };
-
-            cartItems.appendChild(li);
-
-        };
-
-    });
-
-}
+saveCart();
+renderCart();
+  
 // Category Filter
 
 function activateCategoryFilter() {
