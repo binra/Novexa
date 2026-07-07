@@ -43,6 +43,8 @@ async function loadProduct() {
 
                 <h2>$${data.price}</h2>
 
+                <p>${data.description}</p>
+
                 <button class="add-cart">
                     Add To Cart
                 </button>
