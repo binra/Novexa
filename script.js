@@ -32,7 +32,9 @@ renderCart();
 
                 <div class="favorite">♡</div>
 
-                <img src="${data.image}" alt="${data.title}">
+                <a href="product.html?id=${product.id}">
+    <img src="${data.image}" alt="${data.title}">
+</a>
 
                 <h2>${data.title}</h2>
 
