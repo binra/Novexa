@@ -121,7 +121,6 @@ async function loadProducts() {
 
     });
 
-}
 console.log("Delete buttons activated");
 document.querySelectorAll(".delete-btn").forEach(button => {
 
@@ -166,4 +165,7 @@ document.querySelectorAll(".edit-btn").forEach(button => {
     };
 
 });
+
+}
+
 loadProducts();
