@@ -245,6 +245,8 @@ async function loadOrders() {
 
        button.onclick = async () => {
 
+    try {
+
         await updateDoc(
             doc(db, "orders", button.dataset.id),
             {
@@ -252,15 +254,23 @@ async function loadOrders() {
             }
         );
 
+        alert("Completed ✅");
+
         loadOrders();
 
-    };
+    } catch (e) {
 
-});
+        alert(e.message);
+
+    }
+
+};
 document.querySelectorAll(".cancel-btn").forEach(button => {
 
     button.onclick = async () => {
-    
+
+    try {
+
         await updateDoc(
             doc(db, "orders", button.dataset.id),
             {
@@ -268,11 +278,17 @@ document.querySelectorAll(".cancel-btn").forEach(button => {
             }
         );
 
+        alert("Cancelled ✅");
+
         loadOrders();
 
-    };
+    } catch (e) {
 
-});
+        alert(e.message);
+
+    }
+
+};
 }
 
 loadOrders();
