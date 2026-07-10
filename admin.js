@@ -20,6 +20,11 @@ if (password !== "9NG5Y0FRQEG") {
 const form = document.getElementById("productForm");
 const adminProducts = document.getElementById("adminProducts");
 const ordersList = document.getElementById("ordersList");
+const totalProducts = document.getElementById("totalProducts");
+const totalOrders = document.getElementById("totalOrders");
+const pendingOrders = document.getElementById("pendingOrders");
+const completedOrders = document.getElementById("completedOrders");
+const cancelledOrders = document.getElementById("cancelledOrders");
 let editingId = null;
 // ======================
 // Add product
@@ -294,6 +299,36 @@ document.querySelectorAll(".cancel-btn").forEach(button => {
 
 });
 
+async function loadDashboard() {
+
+    const productsSnapshot = await getDocs(collection(db, "products"));
+    totalProducts.textContent = productsSnapshot.size;
+
+    const ordersSnapshot = await getDocs(collection(db, "orders"));
+
+    totalOrders.textContent = ordersSnapshot.size;
+
+    let pending = 0;
+    let completed = 0;
+    let cancelled = 0;
+
+    ordersSnapshot.forEach(order => {
+
+        const status = order.data().status || "Pending";
+
+        if (status === "Pending") pending++;
+        if (status === "Completed") completed++;
+        if (status === "Cancelled") cancelled++;
+
+    });
+
+    pendingOrders.textContent = pending;
+    completedOrders.textContent = completed;
+    cancelledOrders.textContent = cancelled;
+
+}
 }
 
 loadOrders();
+
+loadDashboard();
