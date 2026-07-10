@@ -244,6 +244,8 @@ document.querySelectorAll(".complete-btn").forEach(button => {
 
                 <p><strong>💰 Total:</strong> $${data.total}</p>
 
+                <p><strong>Status:</strong> ${data.status || "Pending"}</p>
+
                 <small>🕒 ${data.createdAt}</small>
 
             </div>
