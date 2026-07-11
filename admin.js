@@ -64,7 +64,7 @@ form.addEventListener("submit", async (e) => {
 
     editingId = null;
 
-    alert("Product Updated Successfully ✅");
+    alert("Product Updated Successfully â");
 
 } else {
 
@@ -214,31 +214,31 @@ async function loadOrders() {
         ordersList.innerHTML += `
 
             <div class="product">
-        <h3>🛒 New Order</h3>
+        <h3>ð New Order</h3>
 
         <button class="complete-btn" data-id="${order.id}">
-            ✅ Completed
+            â Completed
         </button>
 
         <button class="cancel-btn" data-id="${order.id}">
-            🔴 Cancel
+            ð´ Cancel
         </button>
 
-                <p><strong>👤 Name:</strong> ${data.customerName}</p>
+                <p><strong>ð¤ Name:</strong> ${data.customerName}</p>
 
-                <p><strong>📞 Phone:</strong> ${data.customerPhone}</p>
+                <p><strong>ð Phone:</strong> ${data.customerPhone}</p>
 
-                <p><strong>📍 Address:</strong> ${data.customerAddress}</p>
+                <p><strong>ð Address:</strong> ${data.customerAddress}</p>
 
                 <hr>
 
                 <ul>${items}</ul>
 
-                <p><strong>💰 Total:</strong> $${data.total}</p>
+                <p><strong>ð° Total:</strong> $${data.total}</p>
 
                 <p><strong>Status:</strong> ${data.status || "Pending"}</p>
 
-                <small>🕒 ${data.createdAt}</small>
+                <small>ð ${data.createdAt}</small>
 
             </div>
 
@@ -259,7 +259,7 @@ async function loadOrders() {
             }
         );
 
-        alert("Completed ✅");
+        alert("Completed â");
 
         loadOrders();
         loadDashboard();
@@ -285,7 +285,7 @@ document.querySelectorAll(".cancel-btn").forEach(button => {
             }
         );
 
-        alert("Cancelled ✅");
+        alert("Cancelled â");
 
         loadOrders();
         loadDashboard();
