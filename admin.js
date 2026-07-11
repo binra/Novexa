@@ -1,4 +1,5 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
+
 import {
     collection,
     addDoc,
@@ -10,12 +11,25 @@ import {
     query
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-const password = prompt("Enter Admin Password");
+import {
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-if (password !== "9NG5Y0FRQEG") {
-    alert("Access Denied");
+const email = prompt("Admin Email");
+const password = prompt("Admin Password");
+
+signInWithEmailAndPassword(auth, email, password)
+.catch(() => {
+    alert("Wrong email or password");
     window.location.href = "index.html";
-}
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "index.html";
+    }
+});
 
 const form = document.getElementById("productForm");
 const adminProducts = document.getElementById("adminProducts");
