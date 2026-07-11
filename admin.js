@@ -96,7 +96,10 @@ form.addEventListener("submit", async (e) => {
 
     });
 
+alert("Product Added Successfully ✅");
 
+loadProducts();
+loadDashboard();
 }
 
     form.reset();
