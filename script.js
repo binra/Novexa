@@ -32,7 +32,7 @@ async function loadProducts() {
                 <p>$${data.price}</p>
 
                 <a href="${data.link}" target="_blank" class="buy-btn">
-                    Buy on Amazon
+                  🛒 Buy Now
                 </a>
 
             </div>
