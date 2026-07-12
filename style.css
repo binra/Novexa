@@ -337,3 +337,89 @@ header{
     margin:auto;
     line-height:1.7;
 }
+.rating{
+    color:#ffb400;
+    font-size:18px;
+    margin:10px 0;
+}
+
+.rating span{
+    color:#555;
+    font-size:15px;
+}
+
+.price{
+    font-size:26px;
+    color:#27ae60;
+    font-weight:bold;
+}
+
+.shipping{
+    color:#008000;
+    font-size:15px;
+    margin:10px 0;
+    font-weight:bold;
+}
+
+.buy-btn{
+    display:block;
+    margin-top:15px;
+    background:#ff9900;
+    color:#fff;
+    text-decoration:none;
+    padding:14px;
+    border-radius:10px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.buy-btn:hover{
+    background:#e68a00;
+    transform:translateY(-2px);
+}
+.badge{
+    position:absolute;
+    top:15px;
+    left:15px;
+    background:#ff3b30;
+    color:#fff;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+    z-index:2;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+.discount{
+    position:absolute;
+    top:55px;
+    left:15px;
+    background:#27ae60;
+    color:#fff;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+    z-index:2;
+}
+.wishlist{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:42px;
+    height:42px;
+    background:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:22px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    transition:.3s;
+}
+
+.wishlist:hover{
+    transform:scale(1.1);
+    background:#ffe6e6;
+}

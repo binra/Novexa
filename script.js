@@ -1,9 +1,9 @@
 import { db } from "./firebase.js";
 
 import {
-  collection,
-  getDocs,
-  addDoc
+    collection,
+    getDocs,
+    addDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const productsContainer = document.getElementById("products");
@@ -21,6 +21,16 @@ async function loadProducts() {
         productsContainer.innerHTML += `
             <div class="product" data-category="${data.category}">
 
+                <div class="badge">
+                    🔥 HOT DEAL
+                </div>
+                
+                <div class="discount">
+                    -30%
+                </div>
+                <div class="wishlist">
+                    ❤️
+                </div>
                 <div class="favorite">♡</div>
 
                 <a href="product.html?id=${product.id}">
@@ -29,10 +39,26 @@ async function loadProducts() {
 
                 <h2>${data.title}</h2>
 
-                <p>$${data.price}</p>
+                <div class="rating">
+
+                ⭐⭐⭐⭐⭐
+
+                <span>(4.9)</span>
+
+                </div>
+
+                <p class="price">$${data.price}</p>
+
+                <p class="shipping">
+
+                🚚 Free Shipping
+
+                </p>
 
                 <a href="${data.link}" target="_blank" class="buy-btn">
-                  🛒 Buy Now
+
+                🔥 Get Best Price
+
                 </a>
 
             </div>
