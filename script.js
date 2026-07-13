@@ -146,6 +146,50 @@ async function loadFeaturedProducts() {
 
 }
 
+// ======================
+// Best Deals
+// ======================
+
+async function loadBestDeals() {
+
+    const bestDeals = document.getElementById("bestDeals");
+
+    if (!bestDeals) return;
+
+    bestDeals.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "products"));
+
+    snapshot.forEach((product) => {
+
+        const data = product.data();
+
+        if (!data.bestDeal) return;
+
+        bestDeals.innerHTML += `
+
+        <div class="product">
+
+            <img src="${data.image}" alt="${data.title}">
+
+            <h2>${data.title}</h2>
+
+            <p>$${data.price}</p>
+
+            <a href="${data.link}" target="_blank" class="buy-btn">
+
+                🔥 Get Best Price
+
+            </a>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
 // Category Filter
 
 function activateCategoryFilter() {
@@ -238,3 +282,5 @@ if (nextBtn && prevBtn && slides.length > 0) {
 
 }
 loadFeaturedProducts();
+
+loadBestDeals();

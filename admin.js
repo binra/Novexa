@@ -23,7 +23,7 @@ await signInWithEmailAndPassword(auth, email, password);
 const form = document.getElementById("productForm");
 const adminProducts = document.getElementById("adminProducts");
 const featured = document.getElementById("featured");
-
+const bestDeal = document.getElementById("bestDeal");
 let editingId = null;
 
 
@@ -47,6 +47,7 @@ form.addEventListener("submit", async (e) => {
        
         featured: featured.checked,
 
+        bestDeal: bestDeal.checked,
     };
 
 
