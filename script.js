@@ -18,9 +18,14 @@ async function loadProducts() {
 
         const data = product.data();
 
-        if (!data.featured) return;
+        const container =
+            data.featured
+                ? document.getElementById("featuredProducts")
+                : document.getElementById("products");
 
-        productsContainer.innerHTML += `
+        if (!container) return;
+
+        Container.innerHTML += `
             <div class="product" data-category="${data.category}">
 
                 <div class="badge">
