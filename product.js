@@ -26,7 +26,7 @@ async function loadProduct() {
         return;
     }
 
-    const data = productSnap.data();
+    const data = { ...productSnap.data() };
 
     alert(JSON.stringify(data, null, 2));
 
