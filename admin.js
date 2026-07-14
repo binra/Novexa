@@ -29,6 +29,7 @@ const description = document.getElementById("description");
 let editingId = null;
 
 
+console.log(product);
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
