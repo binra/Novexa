@@ -18,10 +18,16 @@ async function loadProducts() {
 
         const data = product.data();
 
-        const container =
-            data.featured
-                ? document.getElementById("featuredProducts")
-                : document.getElementById("products");
+        // Featured Products
+        if (data.featured) return;
+
+        // Best Deals
+        if (data.bestDeal) return;
+
+        // New Arrivals
+        if (data.newArrival) return;
+
+        const container = document.getElementById("products");
 
         if (!container) return;
 
