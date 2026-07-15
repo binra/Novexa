@@ -327,7 +327,7 @@ if (nextBtn && prevBtn && slides.length > 0) {
     setInterval(nextSlide, 4000);
 
 }
-loadFeaturedProducts();
+
 
 loadBestDeals();
 
