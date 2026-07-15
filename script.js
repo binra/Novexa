@@ -48,12 +48,14 @@ async function loadProducts() {
 
                 <div class="rating">
 
-                ⭐⭐⭐⭐⭐
+                    ⭐ ${data.rating || 0}
 
-                <span>(4.9)</span>
+                    <span>
+                        (${data.reviews || 0} Reviews)
+                    </span>
 
                 </div>
-
+                
                 <p class="price">$${data.price}</p>
 
                 <p class="shipping">

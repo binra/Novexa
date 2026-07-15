@@ -32,6 +32,8 @@ const category = document.getElementById("category");
 const link = document.getElementById("link");
 const description = document.getElementById("description");
 
+const rating = document.getElementById("rating");
+const reviews = document.getElementById("reviews");
 const featured = document.getElementById("featured");
 const bestDeal = document.getElementById("bestDeal");
 const newArrival = document.getElementById("newArrival");
@@ -52,6 +54,9 @@ form.addEventListener("submit", async (e) => {
         category: category.value.trim(),
         link: link.value.trim(),
         description: description.value.trim(),
+        rating: Number(rating.value) || 0,
+
+        reviews: Number(reviews.value) || 0,
 
         featured: featured.checked,
 
@@ -162,6 +167,8 @@ async function loadProducts() {
             link.value = data.link || "";
             description.value = data.description || "";
 
+            rating.value = data.rating || "";
+            reviews.value = data.reviews || "";
             featured.checked = data.featured || false;
             bestDeal.checked = data.bestDeal || false;
             newArrival.checked = data.newArrival || false;
