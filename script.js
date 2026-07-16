@@ -18,12 +18,7 @@ async function loadProducts() {
 
         const data = product.data();
 
-        console.log(
-            data.title,
-            "featured:", data.featured,
-            "bestDeal:", data.bestDeal,
-            "newArrival:", data.newArrival
-        );
+
         // Featured Products
         if (data.featured) return;
 
@@ -87,7 +82,7 @@ async function loadProducts() {
 
     });
 
-    console.log("Products:", productsContainer.children.length);
+    
 
     activateCategoryFilter();
 
@@ -248,7 +243,7 @@ async function loadNewArrivals() {
 
     });
 
-    console.log("New Arrivals:", newArrivals.children.length);
+
 }
 
 // Category Filter
