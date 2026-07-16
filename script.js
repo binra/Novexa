@@ -331,9 +331,4 @@ if (nextBtn && prevBtn && slides.length > 0) {
 }
 
 loadProducts();
-
-loadFeaturedProducts();
-
-loadBestDeals();
-
-loadNewArrivals();
+{}
