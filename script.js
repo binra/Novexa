@@ -348,4 +348,4 @@ if (nextBtn && prevBtn && slides.length > 0) {
 
 loadAllProducts();
 
-initWishlist();
+setTimeout(initWishlist, 300);
