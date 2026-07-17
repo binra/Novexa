@@ -348,4 +348,4 @@ function initWishlist() {
 
 loadAllProducts();
 
-setTimeout(initWishlist, 300);
+initWishlist();
