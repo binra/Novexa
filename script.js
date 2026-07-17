@@ -15,6 +15,7 @@ const bestDealsContainer = document.getElementById("bestDeals");
 const newArrivalsContainer = document.getElementById("newArrivals");
 
 const searchInput = document.getElementById("searchInput");
+const sortProducts = document.getElementById("sortProducts");
 
 // ======================
 // Product Card
@@ -125,11 +126,44 @@ async function loadAllProducts() {
 
     const snapshot = await getDocs(collection(db, "products"));
 
+    let products = [];
+
     snapshot.forEach((product) => {
 
-        const data = product.data();
+        products.push({
+            id: product.id,
+            ...product.data()
+        });
 
-        const card = productCard(product.id, data);
+    });
+
+    if (sortProducts) {
+
+        switch (sortProducts.value) {
+
+            case "price-low":
+                products.sort((a, b) => a.price - b.price);
+                break;
+
+            case "price-high":
+                products.sort((a, b) => b.price - a.price);
+                break;
+
+            case "name-asc":
+                products.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+
+            case "name-desc":
+                products.sort((a, b) => b.title.localeCompare(a.title));
+                break;
+
+        }
+
+    }
+
+    products.forEach((data) => {
+
+        const card = productCard(data.id, data);
 
         // Featured Products
         if (data.featured) {
@@ -363,3 +397,13 @@ function updateWishlistCount() {
 
 loadAllProducts().then(initWishlist);
 updateWishlistCount();
+
+if (sortProducts) {
+
+    sortProducts.addEventListener("change", () => {
+
+        loadAllProducts();
+
+    });
+
+}
