@@ -346,6 +346,4 @@ function initWishlist() {
 // Init
 // ======================
 
-loadAllProducts();
-
-initWishlist();
+loadAllProducts().then(initWishlist);
