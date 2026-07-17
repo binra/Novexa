@@ -38,9 +38,7 @@ function productCard(id, data) {
             ❤️
         </div>
 
-        <div class="favorite">
-            ♡
-        </div>
+        <div class="favorite" data-id="${id}">♡</div>
 
         <a href="product.html?id=${id}">
 
@@ -144,6 +142,45 @@ async function loadAllProducts() {
 
         }
 
+        function initWishlist() {
+
+    const favorites = document.querySelectorAll(".favorite");
+
+    favorites.forEach(btn => {
+
+        const id = btn.dataset.id;
+
+        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+        if (wishlist.includes(id)) {
+            btn.textContent = "❤️";
+        }
+
+        btn.addEventListener("click", () => {
+
+            wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+            if (wishlist.includes(id)) {
+
+                wishlist = wishlist.filter(item => item !== id);
+
+                btn.textContent = "♡";
+
+            } else {
+
+                wishlist.push(id);
+
+                btn.textContent = "❤️";
+
+            }
+
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+        });
+
+    });
+
+}
         // Best Deals
         if (data.bestDeal) {
 
@@ -310,3 +347,5 @@ if (nextBtn && prevBtn && slides.length > 0) {
 // ======================
 
 loadAllProducts();
+
+initWishlist();
