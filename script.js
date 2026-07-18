@@ -2,7 +2,10 @@ import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs
+    getDocs,
+    doc,
+    updateDoc,
+    increment
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // ======================
@@ -49,7 +52,11 @@ function productCard(id, data) {
 
         <a href="product.html?id=${id}">
 
-            <img src="${data.image}" alt="${data.title}">
+            <img
+                src="${data.image}"
+                alt="${data.title}"
+                loading="lazy"
+                decoding="async">
 
         </a>
 
@@ -88,7 +95,8 @@ function productCard(id, data) {
         <a
             href="${data.link}"
             target="_blank"
-            class="buy-btn">
+            class="buy-btn"
+            data-id="${id}">
 
             🔥 Get Best Price
 
@@ -101,6 +109,25 @@ function productCard(id, data) {
 
     
 }
+
+async function increaseClick(productId) {
+
+    try {
+
+        const productRef = doc(db, "products", productId);
+
+        await updateDoc(productRef, {
+            clicks: increment(1)
+        });
+
+    } catch (error) {
+
+        console.error("Click counter error:", error);
+
+    }
+
+}
+
 
 // ======================
 // Clear Sections
@@ -221,6 +248,16 @@ async function loadAllProducts() {
     activateCategoryFilter();
 
     loadRecentlyViewed();
+
+    document.querySelectorAll(".buy-btn").forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            increaseClick(btn.dataset.id);
+
+        });
+
+    });
 
 }
 
