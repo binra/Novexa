@@ -106,9 +106,22 @@ async function loadProducts() {
 
     const snapshot = await getDocs(collection(db, "products"));
 
+    let total = 0;
+    let featuredCount = 0;
+    let dealsCount = 0;
+    let sellerCount = 0;
+
     snapshot.forEach((productDoc) => {
 
         const data = productDoc.data();
+
+        total++;
+
+        if(data.featured) featuredCount++;
+
+        if(data.bestDeal) dealsCount++;
+
+        if(data.bestSeller) sellerCount++;
 
         adminProducts.innerHTML += `
         <div class="product">
@@ -138,6 +151,14 @@ async function loadProducts() {
         `;
 
     });
+
+    document.getElementById("totalProducts").textContent = total;
+
+    document.getElementById("featuredProducts").textContent = featuredCount;
+
+    document.getElementById("bestDeals").textContent = dealsCount;
+
+    document.getElementById("bestSellers").textContent = sellerCount;
 
     // Delete
     document.querySelectorAll(".delete-btn").forEach(btn => {
