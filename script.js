@@ -298,17 +298,28 @@ async function loadAllProducts() {
 
 if (searchInput) {
 
-    searchInput.addEventListener("keyup", () => {
+    searchInput.addEventListener("input", () => {
 
         const value = searchInput.value.toLowerCase().trim();
 
+        let visibleProducts = 0;
+
         document.querySelectorAll(".product").forEach((product) => {
 
-            const title = product.querySelector("h2").textContent.toLowerCase();
+            const title =
+                product.querySelector("h2")?.textContent.toLowerCase() || "";
 
-            if (title.includes(value)) {
+            const category =
+                product.dataset.category?.toLowerCase() || "";
+
+            if (
+                title.includes(value) ||
+                category.includes(value)
+            ) {
 
                 product.style.display = "block";
+
+                visibleProducts++;
 
             } else {
 
@@ -317,10 +328,18 @@ if (searchInput) {
             }
 
         });
+        const noResults = document.getElementById("noResults");
+
+        if (noResults) {
+
+            noResults.style.display =
+                visibleProducts === 0 ? "block" : "none";
+
+        }
+         
 
     });
 
-    
 }
 
 // ======================
