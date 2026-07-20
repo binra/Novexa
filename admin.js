@@ -64,6 +64,14 @@ const bestSeller = document.getElementById("bestSeller");
 
 const adminProducts = document.getElementById("adminProducts");
 
+const categoryForm = document.getElementById("categoryForm");
+
+const categoryName = document.getElementById("categoryName");
+
+const categoryIcon = document.getElementById("categoryIcon");
+
+const categoryList = document.getElementById("categoryList");
+
 let editingId = null;
 
 // Save Product
@@ -118,6 +126,30 @@ form.addEventListener("submit", async (e) => {
     form.reset();
 
     loadProducts();
+
+});
+
+categoryForm.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    await addDoc(collection(db, "categories"), {
+
+        name: categoryName.value.trim(),
+
+        icon: categoryIcon.value.trim(),
+
+        active: true,
+
+        order: Date.now()
+
+    });
+
+    categoryForm.reset();
+
+    loadCategories();
+
+    loadCategoryManager();
 
 });
 
@@ -237,5 +269,36 @@ async function loadProducts() {
 
 }
 
+async function loadCategoryManager() {
+
+    categoryList.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "categories"));
+
+    snapshot.forEach((categoryDoc) => {
+
+        const data = categoryDoc.data();
+
+        categoryList.innerHTML += `
+
+        <div class="product">
+
+            <h3>${data.icon} ${data.name}</h3>
+
+            <button
+                class="delete-category"
+                data-id="${categoryDoc.id}">
+                Delete
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
 loadProducts();
 loadCategories();
+loadCategoryManager();
