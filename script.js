@@ -429,7 +429,7 @@ async function loadMoreCategoriesMenu() {
 
             count++;
 
-            if (count > 5) {
+            if (count > 30) {
 
                 dynamicMoreCategories.innerHTML += `
 
