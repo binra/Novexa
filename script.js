@@ -362,20 +362,28 @@ async function loadCategoriesMenu() {
         collection(db, "categories")
     );
 
+    let count = 0;
+
     snapshot.forEach((categoryDoc) => {
 
         const data = categoryDoc.data();
 
         if (data.active !== false) {
 
-            dynamicCategories.innerHTML += `
+            count++;
+
+            if (count <= 4) {
+
+                dynamicCategories.innerHTML += `
 
 <a href="#"
-   data-filter="${data.name}">
-   ${data.icon} ${data.name}
+data-filter="${data.name}">
+${data.icon} ${data.name}
 </a>
 
 `;
+
+            }
 
         }
 
@@ -403,7 +411,7 @@ async function loadMoreCategoriesMenu() {
 
             count++;
 
-            if (count > 4) {
+            if (count > 5) {
 
                 dynamicMoreCategories.innerHTML += `
 
