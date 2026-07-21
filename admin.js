@@ -524,7 +524,7 @@ async function loadBannerManager() {
         };
     });    
     
-}
+
 
     document.querySelectorAll(".delete-banner").forEach(btn => {
 
@@ -543,6 +543,8 @@ async function loadBannerManager() {
         });
 
     });
+
+}
 
 loadProducts();
 loadCategories();
