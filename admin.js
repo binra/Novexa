@@ -89,6 +89,7 @@ const bannerList =
 
 let editingId = null;
 let editingCategoryId = null;
+let editingBannerId = null;
 
 // Save Product
 form.addEventListener("submit", async (e) => {
@@ -196,6 +197,33 @@ bannerForm.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
+    if (editingBannerId) {
+
+    await updateDoc(
+
+        doc(db, "banners", editingBannerId),
+
+        {
+
+            title: bannerTitle.value.trim(),
+
+            image: bannerImage.value.trim(),
+
+            link: bannerLink.value.trim()
+
+        }
+
+    );
+
+    editingBannerId = null;
+
+    bannerForm.querySelector("button").textContent =
+        "Add Banner";
+
+    alert("Banner Updated ✅");
+
+} else {
+
     await addDoc(collection(db, "banners"), {
 
         title: bannerTitle.value.trim(),
@@ -210,7 +238,16 @@ bannerForm.addEventListener("submit", async (e) => {
 
     });
 
+    alert("Banner Added ✅");
+
+}
+
     bannerForm.reset();
+
+    editingBannerId = null;
+
+    bannerForm.querySelector("button").textContent =
+        "Add Banner";
 
     loadBannerManager();
 
@@ -366,37 +403,9 @@ async function loadCategoryManager() {
 
         `;
 
-    });
+    });   
 
-async function loadBannerManager() {
 
-    if (!bannerList) return;
-
-    bannerList.innerHTML = "";
-
-    const snapshot = await getDocs(collection(db, "banners"));
-
-    snapshot.forEach((bannerDoc) => {
-
-        const data = bannerDoc.data();
-
-        bannerList.innerHTML += `
-
-        <div class="product">
-
-            <img src="${data.image}" style="width:100%;max-width:250px;">
-
-            <h3>${data.title}</h3>
-
-            <p>${data.link}</p>
-
-        </div>
-
-        `;
-
-    });
-
-}
 
     // Edit Category
     document.querySelectorAll(".edit-category").forEach(btn => {
@@ -446,6 +455,92 @@ async function loadBannerManager() {
     });
 
 }
+
+async function loadBannerManager() {
+
+    if (!bannerList) return;
+
+    bannerList.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "banners"));
+
+    snapshot.forEach((bannerDoc) => {
+
+        const data = bannerDoc.data();
+
+        bannerList.innerHTML += `
+
+<div class="product">
+
+    <img src="${data.image}" style="width:100%;max-width:250px;">
+
+    <h3>${data.title}</h3>
+
+    <p>${data.link}</p>
+
+    <button
+        type="button"
+        class="edit-banner"
+        data-id="${bannerDoc.id}">
+        Edit
+    </button>
+
+    <button
+        type="button"
+        class="delete-banner"
+        data-id="${bannerDoc.id}">
+        Delete
+    </button>
+
+</div>
+
+`;
+
+    });
+
+    document.querySelectorAll(".edit-banner").forEach(btn => {
+
+        btn.onclick = async () => {
+
+            editingBannerId = btn.dataset.id;
+
+            const snap = await getDoc(
+            doc(db, "banners", editingBannerId)
+            );
+
+            const data = snap.data();
+
+            bannerTitle.value = data.title;
+            bannerImage.value = data.image;
+            bannerLink.value = data.link;
+
+            bannerForm.querySelector("button").textContent =
+                "Update Banner";
+
+            bannerForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        };
+    });    
+    
+}
+
+    document.querySelectorAll(".delete-banner").forEach(btn => {
+
+        btn.onclick = async () => {
+
+            if (!confirm("Delete Banner?")) return;
+
+            await deleteDoc(
+                doc(db, "banners", btn.dataset.id)
+            );
+
+            loadBannerManager();
+            
+        };
+
+    });
 
 loadProducts();
 loadCategories();
