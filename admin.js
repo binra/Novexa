@@ -13,7 +13,7 @@ import {
 
 import {
     onAuthStateChanged,
-    signout
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
 const ADMIN_EMAIL = "benar4700@gmail.com";
