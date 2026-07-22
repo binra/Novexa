@@ -317,7 +317,13 @@ async function loadProducts() {
 
             <h3>${data.title}</h3>
 
-            <p>$${data.price}</p>
+            <p>💰 $${data.price}</p>
+
+            <p>👆 Clicks: ${data.clicks || 0}</p>
+
+            <p>⭐ Rating: ${data.rating}</p>
+
+            <p>💬 Reviews: ${data.reviews}</p>
 
             <button type="button" class="edit-btn"
                 data-id="${productDoc.id}">
