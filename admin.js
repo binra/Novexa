@@ -111,6 +111,8 @@ const bannerLink =
 const bannerList =
     document.getElementById("bannerList");
 
+const topProducts = document.getElementById("topProducts");
+
 let editingId = null;
 let editingCategoryId = null;
 let editingBannerId = null;
@@ -581,10 +583,54 @@ async function loadBannerManager() {
 
 }
 
+async function loadTopProducts() {
+
+    if (!topProducts) return;
+
+    topProducts.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "products"));
+
+    const products = [];
+
+    snapshot.forEach(doc => {
+
+        products.push({
+            id: doc.id,
+            ...doc.data()
+        });
+
+    });
+
+    products.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
+
+    products.slice(0, 10).forEach((product, index) => {
+
+        topProducts.innerHTML += `
+
+        <div class="product">
+
+            <h3>
+                ${index + 1}. ${product.title}
+            </h3>
+
+            <p>👆 Clicks: ${product.clicks || 0}</p>
+
+            <p>💰 $${product.price}</p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
 loadProducts();
 loadCategories();
 loadCategoryManager();
 loadBannerManager();
+loadTopProducts();
 const logoutBtn = document.getElementById("logoutBtn");
 
 if (logoutBtn) {
