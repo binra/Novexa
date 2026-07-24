@@ -69,11 +69,11 @@ function productCard(id, data) {
     <div class="product" data-category="${data.category}" data-id="${id}">
 
         <div class="badge">
-            🔥 HOT DEAL
+            🛍️ AliExpress
         </div>
 
         <div class="discount">
-            -30%
+            ${data.discount || ""}
         </div>
 
         <div class="wishlist">
@@ -114,7 +114,15 @@ function productCard(id, data) {
 
         <p class="price">
 
-            $${data.price}
+            <span class="new-price">
+                $${data.price}
+            </span>
+
+            ${data.originalPrice ? `
+                <span class="old-price">
+                    $${data.originalPrice}
+                </span>
+            ` : ""}
 
         </p>
 
@@ -187,8 +195,10 @@ function clearSections() {
 
 async function loadAllProducts() {
 
+    const keyword = searchInput?.value?.trim() || "phone";
+
     const response = await fetch(
-      "https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=phone"
+      `https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=${encodeURIComponent(keyword)}`
     );
 
     const apiData = await response.json();
@@ -213,6 +223,8 @@ async function loadAllProducts() {
         title: item.product_title,
         image: item.product_main_image_url,
         price: parseFloat(item.target_sale_price),
+        originalPrice: parseFloat(item.target_original_price),
+        discount: item.discount,
         link: item.promotion_link,
         rating: item.evaluate_rate || "0",
         reviews: item.lastest_volume || 0,
@@ -328,15 +340,7 @@ async function loadAllProducts() {
 
     loadRecentlyViewed();
 
-    document.querySelectorAll(".buy-btn").forEach(btn => {
-
-        btn.addEventListener("click", () => {
-
-            increaseClick(btn.dataset.id);
-
-        });
-
-    });
+    
 
 }
 
@@ -346,7 +350,7 @@ async function loadAllProducts() {
 
 if (searchInput) {
 
-    searchInput.addEventListener("input", () => {
+    searchInput.addEventListener("input", async () => {
 
         const value = searchInput.value.toLowerCase().trim();
 
@@ -385,6 +389,7 @@ if (searchInput) {
 
         }
          
+        await loadAllProducts();
 
     });
 
