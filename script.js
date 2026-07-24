@@ -11,6 +11,34 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // ======================
+// AliExpress API
+// ======================
+
+const API_URL = "https://quiet-haze-9edd.benarkalarey.workers.dev";
+
+async function fetchAliExpressProducts(keyword = "phone") {
+    try {
+
+        const response = await fetch(
+            `${API_URL}?keywords=${encodeURIComponent(keyword)}`
+        );
+
+        const data = await response.json();
+
+        console.log("AliExpress:", data);
+
+        return data;
+
+    } catch (error) {
+
+        console.error("AliExpress Error:", error);
+
+        return null;
+
+    }
+}
+
+// ======================
 // Elements
 // ======================
 
@@ -757,3 +785,5 @@ if (moreBtn && dropdown) {
     });
 
 }
+
+fetchAliExpressProducts();
