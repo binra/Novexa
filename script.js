@@ -205,13 +205,12 @@ async function loadAllProducts() {
 
     const apiData = await response.json();
 
-    alert(
-      apiData?.aliexpress_affiliate_product_query_response
-        ?.resp_result
-        ?.result
-        ?.products
-        ?.product
-        ?.length
+    console.log(
+    apiData.aliexpress_affiliate_product_query_response
+    .resp_result
+    .result
+    .products
+    .product[0]
     );
 
     console.log("AliExpress:", apiData);
