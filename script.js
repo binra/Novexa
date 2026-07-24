@@ -751,94 +751,10 @@ async function loadAllProducts() {
             
         }
 
-        // 4) Merge both lists — my products first, then AliExpress
+                // 4) Merge both lists — my products first, then AliExpress
         allProducts = [...filteredMyProducts, ...aliProducts];
 
-
-
-        if (sortProducts) {
-
-            switch (sortProducts.value) {
-
-                case "price-low":
-                    allProducts.sort((a, b) => a.price - b.price);
-                    break;
-
-                case "price-high":
-                    allProducts.sort((a, b) => b.price - a.price);
-                    break;
-
-                case "name-asc":
-                    allProducts.sort((a, b) =>
-                        a.title.localeCompare(b.title)
-                    );
-                    break;
-
-                case "name-desc":
-                    allProducts.sort((a, b) =>
-                        b.title.localeCompare(a.title)
-                    );
-                    break;
-
-            }
-
-        }
-
-        const start = (currentPage - 1) * productsPerPage;
-
-        const end = start + productsPerPage;
-
-        const pageProducts = allProducts.slice(start, end);
-
-               const popularProducts = allProducts.slice(0, 8);
-
-        popularProducts.forEach(item => {
-
-            if (popularContainer) {
-
-                popularContainer.innerHTML += productCard(item.id, item);
-
-            }
-
-        });
-
-        pageProducts.forEach(item => {
-
-            const card = productCard(item.id, item);
-
-            if (productsContainer) {
-
-                productsContainer.innerHTML += card;
-
-            }
-
-            if (featuredContainer) {
-
-                featuredContainer.innerHTML += card;
-
-            }
-
-            if (bestDealsContainer) {
-
-                bestDealsContainer.innerHTML += card;
-
-            }
-
-            if (newArrivalsContainer) {
-
-                newArrivalsContainer.innerHTML += card;
-
-            }
-
-        });
-
-        activateCategoryFilter();
-
-        loadRecentlyViewed();
-
-        initWishlist();
-
-        updateWishlistCount();
+        renderProducts();
 
     } catch (error) {
 
@@ -863,6 +779,101 @@ async function loadAllProducts() {
     }
 
 }
+
+// ======================
+// Render Products (no re-fetching — just displays allProducts)
+// ======================
+function renderProducts() {
+
+    clearSections();
+
+    if (sortProducts) {
+
+        switch (sortProducts.value) {
+
+            case "price-low":
+                allProducts.sort((a, b) => a.price - b.price);
+                break;
+
+            case "price-high":
+                allProducts.sort((a, b) => b.price - a.price);
+                break;
+
+            case "name-asc":
+                allProducts.sort((a, b) =>
+                    a.title.localeCompare(b.title)
+                );
+                break;
+
+            case "name-desc":
+                allProducts.sort((a, b) =>
+                    b.title.localeCompare(a.title)
+                );
+                break;
+
+        }
+
+    }
+
+    const start = (currentPage - 1) * productsPerPage;
+
+    const end = start + productsPerPage;
+
+    const pageProducts = allProducts.slice(start, end);
+
+    const popularProducts = allProducts.slice(0, 8);
+
+    popularProducts.forEach(item => {
+
+        if (popularContainer) {
+
+            popularContainer.innerHTML += productCard(item.id, item);
+
+        }
+
+    });
+
+    pageProducts.forEach(item => {
+
+        const card = productCard(item.id, item);
+
+        if (productsContainer) {
+
+            productsContainer.innerHTML += card;
+
+        }
+
+        if (featuredContainer) {
+
+            featuredContainer.innerHTML += card;
+
+        }
+
+        if (bestDealsContainer) {
+
+            bestDealsContainer.innerHTML += card;
+
+        }
+
+        if (newArrivalsContainer) {
+
+            newArrivalsContainer.innerHTML += card;
+
+        }
+
+    });
+
+    activateCategoryFilter();
+
+    loadRecentlyViewed();
+
+    initWishlist();
+
+    updateWishlistCount();
+
+}
+
+
 
 // ======================
 // Search
@@ -890,11 +901,12 @@ if (sortProducts) {
 
         currentPage = 1;
 
-        loadAllProducts();
+        renderProducts();
 
     });
 
 }
+
 
 
 
@@ -914,11 +926,10 @@ if (nextPageBtn) {
 
             pageNumber.textContent = currentPage;
 
-
-
+            
         }
 
-        loadAllProducts();
+        renderProducts();
 
     });
 
@@ -938,13 +949,14 @@ if (prevPageBtn) {
 
             }
 
-            loadAllProducts();
+            renderProducts();
 
         }
 
     });
 
 }
+
 
 // ======================
 // More Menu
