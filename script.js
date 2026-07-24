@@ -14,6 +14,30 @@ import {
     orderBy
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+window.onerror = function (message, source, line, column, error) {
+
+    document.body.innerHTML = `
+        <div style="
+            background:#111;
+            color:red;
+            padding:20px;
+            font-size:18px;
+            white-space:pre-wrap;
+        ">
+            <h2>JavaScript Error</h2>
+
+            ${message}
+
+            Line: ${line}
+
+            Column: ${column}
+
+            File: ${source}
+        </div>
+    `;
+
+};
+
 // ======================
 // DOM Elements
 // ======================
