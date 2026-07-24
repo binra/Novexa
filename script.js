@@ -833,7 +833,7 @@ function renderProducts() {
 
     });
 
-    pageProducts.forEach(item => {
+        pageProducts.forEach(item => {
 
         const card = productCard(item.id, item);
 
@@ -843,25 +843,26 @@ function renderProducts() {
 
         }
 
-        if (featuredContainer) {
+        if (featuredContainer && item.featured) {
 
             featuredContainer.innerHTML += card;
 
         }
 
-        if (bestDealsContainer) {
+        if (bestDealsContainer && item.bestDeal) {
 
             bestDealsContainer.innerHTML += card;
 
         }
 
-        if (newArrivalsContainer) {
+        if (newArrivalsContainer && item.newArrival) {
 
             newArrivalsContainer.innerHTML += card;
 
         }
 
     });
+
 
     activateCategoryFilter();
 
