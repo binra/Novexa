@@ -201,6 +201,8 @@ async function loadAllProducts() {
       `https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=${encodeURIComponent(keyword)}`
     );
 
+    alert("FETCH OK");
+
     const apiData = await response.json();
 
     alert(
