@@ -198,7 +198,7 @@ async function loadAllProducts() {
     async function fetchAliExpressProducts(keyword) {
     try {
         const response = await fetch(
-            "https://quiet-haze-9edd.benarkalareyy.workers.dev/?keywords=" + encodeURIComponent(keyword)
+            "https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=" + encodeURIComponent(keyword)
         );
         
         const apiData = await response.json();
@@ -237,7 +237,7 @@ async function loadAllProducts() {
         console.error("Fetch Error:", error);
         return [];
     }
-    
+
 }
 
 async function handleSearch() {
