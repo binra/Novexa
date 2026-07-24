@@ -192,8 +192,16 @@ async function loadAllProducts() {
     if (trendingContainer)
     trendingContainer.innerHTML = "";
 
-    const snapshot = await getDocs(collection(db, "products"));
+    // const snapshot = await getDocs(collection(db, "products"));
 
+    const response = await fetch(
+        "https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=phone"
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+    
     let products = [];
 
     snapshot.forEach((product) => {
