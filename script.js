@@ -584,13 +584,41 @@ function productCard(id, data) {
 // Load All Products
 // ======================
 
+
+// ======================
+// Category name -> AliExpress search keyword
+// ======================
+const categoryKeywordMap = {
+    "Bags": "bags",
+    "Books": "books",
+    "Toys": "toys",
+    "Audio": "headphones speaker",
+    "Accessories": "accessories",
+    "Shoes": "shoes",
+    "PC": "desktop computer",
+    "Baby": "baby products",
+    "Automotive": "car accessories",
+    "Home & Kitchen": "home kitchen",
+    "Pet Supplies": "pet supplies",
+    "Fashion": "fashion clothes",
+    "TVs": "television",
+    "Phones": "phone",
+    "Gaming": "gaming",
+    "Furniture": "furniture",
+    "Sport": "sport equipment",
+    "Beauty": "beauty makeup",
+    "Laptops": "laptop",
+    "Cameras": "camera",
+    "Smart Watches": "smart watch"
+};
+
 async function loadAllProducts() {
 
     clearSections();
 
-    const keyword = searchInput?.value?.trim() || "phone";
+    const keyword = searchInput?.value?.trim() || "";
 
-            try {
+    try {
 
         // 1) Get my own products from Firestore
         const snapshot = await getDocs(collection(db, "products"));
@@ -608,53 +636,119 @@ async function loadAllProducts() {
 
         });
 
-        // 2) Get AliExpress products from the API
-        let aliProducts = [];
-
-        try {
-
-            const apiData = await fetchAliExpressProducts(keyword);
-
-            const rawProducts =
-                apiData
-                ?.aliexpress_affiliate_product_query_response
-                ?.resp_result
-                ?.result
-                ?.products
-                ?.product || [];
-
-            aliProducts = rawProducts.map(item => ({
-
-                id: item.product_id,
-                title: item.product_title || item.title || "No Title",
-                image: item.product_main_image_url,
-                price: Number(item.target_sale_price || 0),
-                originalPrice: Number(item.target_original_price || 0),
-                discount: item.discount || "",
-                link: item.product_detail_url,
-                rating: item.evaluate_rate || "0",
-                reviews: item.lastest_volume || 0,
-                category: item.first_level_category_name || "All",
-                featured: true,
-                bestDeal: true,
-                newArrival: true,
-                clicks: 0
-
-            }));
-
-        } catch (aliError) {
-
-            console.error("AliExpress Error:", aliError);
-            // Don't stop everything — just show my own products
-        }
-
-        // 3) Filter my products by search keyword (AliExpress already filters by keyword itself)
+        // Filter my products by search keyword
         let filteredMyProducts = myProducts;
 
         if (keyword) {
             filteredMyProducts = myProducts.filter(item =>
                 item.title?.toLowerCase().includes(keyword.toLowerCase())
             );
+        }
+
+        // 2) Build the list of AliExpress searches to run
+        let aliCategoryList = [];
+
+        if (keyword) {
+
+            aliCategoryList = [
+                { name: "All", keyword: keyword }
+            ];
+
+        } else {
+
+            if (categories.length === 0) {
+
+                const catSnapshot = await getDocs(collection(db, "categories"));
+
+                categories = [];
+
+                catSnapshot.forEach(doc => {
+                    categories.push(doc.data());
+                });
+
+            }
+
+            aliCategoryList = categories
+                .filter(cat => cat.name)
+                .map(cat => ({
+                    name: cat.name,
+                    keyword: categoryKeywordMap[cat.name] || cat.name
+                }));
+
+            if (aliCategoryList.length === 0) {
+                aliCategoryList = [{ name: "All", keyword: "phone" }];
+            }
+
+        }
+
+        // 3) Get AliExpress products for each category (one at a time, to avoid rate limits / aborts)
+        let aliProducts = [];
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        try {
+
+            const results = [];
+
+            for (const cat of aliCategoryList) {
+
+                try {
+
+                    const data = await fetchAliExpressProducts(cat.keyword);
+                    results.push({ data, categoryName: cat.name });
+
+                } catch (err) {
+
+                    console.error("AliExpress Error for", cat.name, err);
+                    results.push(null);
+
+                }
+
+                await delay(300);
+
+            }
+
+            results.forEach(result => {
+
+                if (!result) return;
+
+                const rawProducts =
+                    result.data
+                    ?.aliexpress_affiliate_product_query_response
+                    ?.resp_result
+                    ?.result
+                    ?.products
+                    ?.product || [];
+
+                const mapped = rawProducts.map(item => ({
+
+                    id: item.product_id,
+                    title: item.product_title || item.title || "No Title",
+                    image: item.product_main_image_url,
+                    price: Number(item.target_sale_price || 0),
+                    originalPrice: Number(item.target_original_price || 0),
+                    discount: item.discount || "",
+                    link: item.product_detail_url,
+                    rating: item.evaluate_rate || "0",
+                    reviews: item.lastest_volume || 0,
+                    category: result.categoryName,
+                    featured: true,
+                    bestDeal: true,
+                    newArrival: true,
+                    clicks: 0
+
+                }));
+
+                aliProducts.push(...mapped);
+
+            });
+
+        } catch (aliError) {
+
+            console.error("AliExpress Error:", aliError);
+            
         }
 
         // 4) Merge both lists — my products first, then AliExpress
