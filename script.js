@@ -590,29 +590,76 @@ async function loadAllProducts() {
 
     const keyword = searchInput?.value?.trim() || "phone";
 
-        try {
+            try {
 
+        // 1) Get my own products from Firestore
         const snapshot = await getDocs(collection(db, "products"));
 
-        allProducts = [];
+        const myProducts = [];
 
         snapshot.forEach(docItem => {
 
             const data = docItem.data();
 
-            allProducts.push({
+            myProducts.push({
                 id: docItem.id,
                 ...data
             });
 
         });
 
-        // Filter by search keyword
+        // 2) Get AliExpress products from the API
+        let aliProducts = [];
+
+        try {
+
+            const apiData = await fetchAliExpressProducts(keyword);
+
+            const rawProducts =
+                apiData
+                ?.aliexpress_affiliate_product_query_response
+                ?.resp_result
+                ?.result
+                ?.products
+                ?.product || [];
+
+            aliProducts = rawProducts.map(item => ({
+
+                id: item.product_id,
+                title: item.product_title || item.title || "No Title",
+                image: item.product_main_image_url,
+                price: Number(item.target_sale_price || 0),
+                originalPrice: Number(item.target_original_price || 0),
+                discount: item.discount || "",
+                link: item.product_detail_url,
+                rating: item.evaluate_rate || "0",
+                reviews: item.lastest_volume || 0,
+                category: item.first_level_category_name || "All",
+                featured: true,
+                bestDeal: true,
+                newArrival: true,
+                clicks: 0
+
+            }));
+
+        } catch (aliError) {
+
+            console.error("AliExpress Error:", aliError);
+            // Don't stop everything — just show my own products
+        }
+
+        // 3) Filter my products by search keyword (AliExpress already filters by keyword itself)
+        let filteredMyProducts = myProducts;
+
         if (keyword) {
-            allProducts = allProducts.filter(item =>
+            filteredMyProducts = myProducts.filter(item =>
                 item.title?.toLowerCase().includes(keyword.toLowerCase())
             );
         }
+
+        // 4) Merge both lists — my products first, then AliExpress
+        allProducts = [...filteredMyProducts, ...aliProducts];
+
 
 
         if (sortProducts) {
