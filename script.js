@@ -752,6 +752,8 @@ fetch("https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=phone")
 
 updateWishlistCount();
 
+alert("SCRIPT LOADED");
+
 if (sortProducts) {
 
     sortProducts.addEventListener("change", () => {
