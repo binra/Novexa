@@ -210,6 +210,8 @@ async function loadAllProducts() {
     if (trendingContainer)
     trendingContainer.innerHTML = "";
 
+    // const snapshot = await getDocs(collection(db, "products"));
+
     let products = apiData.aliexpress_affiliate_product_query_response
       ?.resp_result
       ?.result
