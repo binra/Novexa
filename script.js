@@ -77,7 +77,8 @@ async function fetchAliExpressProducts(keyword = "phone") {
 
     if (!response.ok) {
 
-        throw new Error("AliExpress API Error");
+        const errorText = await response.text();
+        throw new Error(errorText);
 
     }
 
