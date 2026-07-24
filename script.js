@@ -203,8 +203,6 @@ async function loadAllProducts() {
 
     const apiData = await response.json();
 
-    console.log(apiData);
-
     alert(
       apiData?.aliexpress_affiliate_product_query_response
         ?.resp_result
