@@ -590,49 +590,30 @@ async function loadAllProducts() {
 
     const keyword = searchInput?.value?.trim() || "phone";
 
-    try {
+        try {
 
-        const apiData = await fetchAliExpressProducts(keyword);
+        const snapshot = await getDocs(collection(db, "products"));
 
-        let products =
-            apiData
-            ?.aliexpress_affiliate_product_query_response
-            ?.resp_result
-            ?.result
-            ?.products
-            ?.product || [];
+        allProducts = [];
 
-        allProducts = products.map(item => ({
+        snapshot.forEach(docItem => {
 
-            id: item.product_id,
+            const data = docItem.data();
 
-            title: item.product_title || item.title || "No Title",
+            allProducts.push({
+                id: docItem.id,
+                ...data
+            });
 
-            image: item.product_main_image_url,
+        });
 
-            price: Number(item.target_sale_price || 0),
+        // Filter by search keyword
+        if (keyword) {
+            allProducts = allProducts.filter(item =>
+                item.title?.toLowerCase().includes(keyword.toLowerCase())
+            );
+        }
 
-            originalPrice: Number(item.target_original_price || 0),
-
-            discount: item.discount || "",
-
-            link: item.product_detail_url,
-
-            rating: item.evaluate_rate || "0",
-
-            reviews: item.lastest_volume || 0,
-
-            category: item.first_level_category_name || "All",
-
-            featured: true,
-
-            bestDeal: true,
-
-            newArrival: true,
-
-            clicks: 0
-
-        }));
 
         if (sortProducts) {
 
