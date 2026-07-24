@@ -706,7 +706,7 @@ async function loadAllProducts() {
 
                 }
 
-                await delay(300);
+                await delay(100);
 
             }
 
