@@ -195,55 +195,85 @@ function clearSections() {
 
 async function loadAllProducts() {
 
-    const keyword = searchInput?.value?.trim() || "phone";
-
-    const response = await fetch(
-      `https://quiet-haze-9edd.benarkalarey.workers.dev/?keywords=${encodeURIComponent(keyword)}`
-    );
-
-    alert("FETCH OK");
-
-    const apiData = await response.json();
-
-    console.log(
-    apiData.aliexpress_affiliate_product_query_response
-    .resp_result
-    .result
-    .products
-    .product[0]
-    );
-
-    console.log("AliExpress:", apiData);
-
     clearSections();
 
-    if (trendingContainer)
-    trendingContainer.innerHTML = "";
+    if (trendingContainer) trendingContainer.innerHTML = "";
+    if (popularContainer) popularContainer.innerHTML = "";
 
-    // const snapshot = await getDocs(collection(db, "products"));
+    const keyword = searchInput?.value?.trim() || "phone";
 
-    let products = apiData.aliexpress_affiliate_product_query_response
-      ?.resp_result
-      ?.result
-      ?.products
-      ?.product || [];
+    try {
 
-    products = products.map(item => ({
-        id: item.product_id,
-        title: item.product_title,
-        image: item.product_main_image_url,
-        price: parseFloat(item.target_sale_price),
-        originalPrice: parseFloat(item.target_original_price),
-        discount: item.discount,
-        link: item.promotion_link,
-        rating: item.evaluate_rate || "0",
-        reviews: item.lastest_volume || 0,
-        category: item.first_level_category_name || "All",
-        featured: true,
-        bestDeal: true,
-        newArrival: true,
-        clicks: 0
-    }));
+        const api = await fetchAliExpressProducts(keyword);
+
+        if (!api) {
+            console.error("No API data");
+            return;
+        }
+
+        let products =
+            api.aliexpress_affiliate_product_query_response
+            ?.resp_result
+            ?.result
+            ?.products
+            ?.product || [];
+
+        products = products.map(item => ({
+            id: item.product_id,
+            title: item.product_title || item.title || "No Title",
+            image: item.product_main_image_url,
+            price: Number(item.target_sale_price || 0),
+            originalPrice: Number(item.target_original_price || 0),
+            discount: item.discount || "",
+            link: item.product_detail_url,
+            rating: item.evaluate_rate || "0",
+            reviews: item.lastest_volume || 0,
+            category: item.first_level_category_name || "All",
+            featured: true,
+            bestDeal: true,
+            newArrival: true,
+            clicks: 0
+        }));
+
+        const start = (currentPage - 1) * productsPerPage;
+        const end = start + productsPerPage;
+
+        const pageProducts = products.slice(start, end);
+        const popularProducts = products.slice(0, 8);
+
+        popularProducts.forEach(item => {
+            popularContainer.innerHTML += productCard(item.id, item);
+        });
+
+        pageProducts.forEach(item => {
+
+            const card = productCard(item.id, item);
+
+            productsContainer.innerHTML += card;
+
+            featuredContainer.innerHTML += card;
+
+            bestDealsContainer.innerHTML += card;
+
+            newArrivalsContainer.innerHTML += card;
+
+        });
+
+        activateCategoryFilter();
+
+        initWishlist();
+
+        updateWishlistCount();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(err.message);
+
+    }
+
+}
 
     const popularProducts = [...products].slice(0, 8);
 
