@@ -828,4 +828,3 @@ if (moreBtn && dropdown) {
 
 }
 
-fetchAliExpressProducts();
